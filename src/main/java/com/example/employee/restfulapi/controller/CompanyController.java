@@ -1,6 +1,7 @@
 package com.example.employee.restfulapi.controller;
 
 import com.example.employee.restfulapi.entity.Company;
+import com.example.employee.restfulapi.entity.Employee;
 import com.example.employee.restfulapi.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,11 @@ public class CompanyController {
     public List<Company> listPage(@PathVariable Integer page,
                                   @PathVariable Integer pageSize) {
         return companyRepository.findAll(new PageRequest(page, pageSize)).getContent();
+    }
+
+    @GetMapping(value = COMPANY_URL_BASE + "/{id}/employees")
+    public List<Employee> listEmployee(@PathVariable Long id) {
+        return companyRepository.findOne(id).getEmployees();
     }
 
     /**
@@ -64,8 +70,10 @@ public class CompanyController {
      */
     @PutMapping(value = COMPANY_URL_BASE + "/{id}")
     public Company update(@PathVariable Long id, @RequestBody Company newCompany) {
-        newCompany.setId(id);
-        return companyRepository.save(newCompany);
+        Company company = companyRepository.findOne(id);
+        company.setEmployeesNumber(newCompany.getEmployeesNumber());
+        company.setCompanyName(newCompany.getCompanyName());
+        return companyRepository.save(company);
     }
 
     /**
@@ -77,7 +85,6 @@ public class CompanyController {
     @DeleteMapping(value = COMPANY_URL_BASE + "/{id}")
     public String delete(@PathVariable Long id) {
         companyRepository.delete(id);
-        // TODO: 删除该company下所有的employee
         return "";
     }
 }

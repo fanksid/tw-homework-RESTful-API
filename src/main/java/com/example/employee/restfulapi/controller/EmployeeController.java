@@ -3,6 +3,7 @@ package com.example.employee.restfulapi.controller;
 import com.example.employee.restfulapi.entity.Employee;
 import com.example.employee.restfulapi.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,9 +26,20 @@ public class EmployeeController {
         return employeeRepository.findAll();
     }
 
+    /**
+     * Get male employee list
+     *
+     * @return employee male list
+     */
     @GetMapping(value = EMPLOYEE_URL_BASE +"/male")
     public List<Employee> listMale() {
         return employeeRepository.findAllByGender("male");
+    }
+
+    @GetMapping(value = EMPLOYEE_URL_BASE + "/page/{page}/pageSize/{pageSize}")
+    public List<Employee> listPage(@PathVariable Integer page,
+                                   @PathVariable Integer pageSize) {
+        return employeeRepository.findAll(new PageRequest(page, pageSize)).getContent();
     }
 
     /**

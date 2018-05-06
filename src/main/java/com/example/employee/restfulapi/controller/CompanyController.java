@@ -3,6 +3,7 @@ package com.example.employee.restfulapi.controller;
 import com.example.employee.restfulapi.entity.Company;
 import com.example.employee.restfulapi.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,12 @@ public class CompanyController {
     @GetMapping(value = COMPANY_URL_BASE)
     public List<Company> list() {
         return companyRepository.findAll();
+    }
+
+    @GetMapping(value = COMPANY_URL_BASE + "/page/{page}/pageSize/{pageSize}")
+    public List<Company> listPage(@PathVariable Integer page,
+                                  @PathVariable Integer pageSize) {
+        return companyRepository.findAll(new PageRequest(page, pageSize)).getContent();
     }
 
     /**
@@ -46,6 +53,7 @@ public class CompanyController {
     public Company add(@RequestBody Company company) {
         return companyRepository.save(company);
     }
+
 
     /**
      * Update company

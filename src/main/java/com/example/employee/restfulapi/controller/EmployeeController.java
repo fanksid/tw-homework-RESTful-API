@@ -25,6 +25,11 @@ public class EmployeeController {
         return employeeRepository.findAll();
     }
 
+    @GetMapping(value = EMPLOYEE_URL_BASE +"/male")
+    public List<Employee> listMale() {
+        return employeeRepository.findAllByGender("male");
+    }
+
     /**
      * Get a employee by id
      *

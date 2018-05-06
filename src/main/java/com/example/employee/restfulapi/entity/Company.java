@@ -1,8 +1,8 @@
 package com.example.employee.restfulapi.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Company {
@@ -12,7 +12,15 @@ public class Company {
     private String companyName;
     private Integer employeesNumber;
 
+    @OneToMany(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "companyId")
+    private List<Employee> employees = new ArrayList<>();
+
     public Company() {
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
     }
 
     public Company(String companyName, Integer employeesNumber) {
@@ -43,4 +51,5 @@ public class Company {
     public void setEmployeesNumber(Integer employeesNumber) {
         this.employeesNumber = employeesNumber;
     }
+
 }

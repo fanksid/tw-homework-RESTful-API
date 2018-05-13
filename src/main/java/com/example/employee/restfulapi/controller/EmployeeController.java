@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/employees")
 public class EmployeeController {
-    public static final String EMPLOYEE_URL_BASE = "/employees";
     //在此处完成Employee API
 
     @Autowired
@@ -21,7 +21,7 @@ public class EmployeeController {
      *
      * @return employee list
      */
-    @GetMapping(value = EMPLOYEE_URL_BASE)
+    @GetMapping()
     public List<Employee> list() {
         return employeeRepository.findAll();
     }
@@ -31,12 +31,12 @@ public class EmployeeController {
      *
      * @return employee male list
      */
-    @GetMapping(value = EMPLOYEE_URL_BASE +"/male")
+    @GetMapping(value = "/male")
     public List<Employee> listMale() {
         return employeeRepository.findAllByGender("male");
     }
 
-    @GetMapping(value = EMPLOYEE_URL_BASE + "/page/{page}/pageSize/{pageSize}")
+    @GetMapping(value = "/page/{page}/pageSize/{pageSize}")
     public List<Employee> listPage(@PathVariable Integer page,
                                    @PathVariable Integer pageSize) {
         return employeeRepository.findAll(new PageRequest(page, pageSize)).getContent();
@@ -48,7 +48,7 @@ public class EmployeeController {
      * @param id employee id
      * @return employee
      */
-    @GetMapping(value = EMPLOYEE_URL_BASE + "/{id}")
+    @GetMapping(value = "/{id}")
     public Employee get(@PathVariable Long id) {
         return employeeRepository.findOne(id);
     }
@@ -59,7 +59,7 @@ public class EmployeeController {
      * @param employee
      * @return added employee
      */
-    @PostMapping(value = EMPLOYEE_URL_BASE)
+    @PostMapping()
     public Employee add(@RequestBody Employee employee) {
         return employeeRepository.save(employee);
     }
@@ -71,7 +71,7 @@ public class EmployeeController {
      * @param employee new employee data
      * @return updated employee
      */
-    @PutMapping(value = EMPLOYEE_URL_BASE + "/{id}")
+    @PutMapping(value = "/{id}")
     public Employee update(@PathVariable Long id, @RequestBody Employee employee) {
         employee.setId(id);
         return employeeRepository.save(employee);
@@ -83,7 +83,7 @@ public class EmployeeController {
      * @param id employee id
      * @return empty string
      */
-    @DeleteMapping(value = EMPLOYEE_URL_BASE + "/{id}")
+    @DeleteMapping(value = "/{id}")
     public String delete(@PathVariable Long id) {
         employeeRepository.delete(id);
         return "";

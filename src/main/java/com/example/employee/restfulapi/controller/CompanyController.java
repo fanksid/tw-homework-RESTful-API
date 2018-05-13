@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/companies")
 public class CompanyController {
-    private static final String COMPANY_URL_BASE = "/companies";
     //在此处完成Company API
 
     @Autowired
@@ -22,18 +22,18 @@ public class CompanyController {
      *
      * @return company list
      */
-    @GetMapping(value = COMPANY_URL_BASE)
+    @GetMapping()
     public List<Company> list() {
         return companyRepository.findAll();
     }
 
-    @GetMapping(value = COMPANY_URL_BASE + "/page/{page}/pageSize/{pageSize}")
+    @GetMapping(value = "/page/{page}/pageSize/{pageSize}")
     public List<Company> listPage(@PathVariable Integer page,
                                   @PathVariable Integer pageSize) {
         return companyRepository.findAll(new PageRequest(page, pageSize)).getContent();
     }
 
-    @GetMapping(value = COMPANY_URL_BASE + "/{id}/employees")
+    @GetMapping(value = "/{id}/employees")
     public List<Employee> listEmployee(@PathVariable Long id) {
         return companyRepository.findOne(id).getEmployees();
     }
@@ -44,7 +44,7 @@ public class CompanyController {
      * @param id
      * @return company
      */
-    @GetMapping(value = COMPANY_URL_BASE + "/{id}")
+    @GetMapping(value = "/{id}")
     public Company get(@PathVariable Long id) {
         return companyRepository.findOne(id);
     }
@@ -55,7 +55,7 @@ public class CompanyController {
      * @param company new company
      * @return added company
      */
-    @PostMapping(value = COMPANY_URL_BASE)
+    @PostMapping()
     public Company add(@RequestBody Company company) {
         return companyRepository.save(company);
     }
@@ -68,7 +68,7 @@ public class CompanyController {
      * @param newCompany new company data
      * @return updated company
      */
-    @PutMapping(value = COMPANY_URL_BASE + "/{id}")
+    @PutMapping(value = "/{id}")
     public Company update(@PathVariable Long id, @RequestBody Company newCompany) {
         Company company = companyRepository.findOne(id);
         company.setEmployeesNumber(newCompany.getEmployeesNumber());
@@ -82,7 +82,7 @@ public class CompanyController {
      * @param id company id
      * @return null
      */
-    @DeleteMapping(value = COMPANY_URL_BASE + "/{id}")
+    @DeleteMapping(value = "/{id}")
     public String delete(@PathVariable Long id) {
         companyRepository.delete(id);
         return "";
